@@ -11,3 +11,24 @@ Send {Tab}{Tab}{Tab}{Tab}{Tab}{Tab}{Space}{Tab}{Tab}{Space}{Tab}
 #ifWinActive
 return
 
+
+
+;N++ shortcuts globally
+^+up::
+SendInput {Home}+{End}^x{BS}{Home}^v{Enter}{Up}
+return
+
+^+Down::
+SendInput {Home}+{End}^x{BS}{Down}{End}{Enter}^v
+return
+
+^d::
+SendInput {End}+{Home}^c{End}{Enter}^v
+return
+
+
+
+
+
+
+
