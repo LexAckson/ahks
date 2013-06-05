@@ -26,8 +26,13 @@ return
 SendInput {End}+{Home}^c{End}{Enter}^v
 return
 
-
-
+^!d::
+Run, C:\
+Sleep 400
+Send {Tab}{Tab}{Space}
+SendInput {Raw}Computer\Pocket_PC\\\Program Files\invivo\data
+Send {Enter}
+return
 
 
 
