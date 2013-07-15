@@ -1,3 +1,18 @@
+;record a click and send with shiftRight
+CoordMode, Mouse, Screen ;get mouse coord relative to screen
+
++Right::
+MouseGetPos, xpos2, ypos2
+MouseMove, %xpos%, %ypos%, 0
+Click
+MouseMove, %xpos2%, %ypos2%, 0
+return
+
++^LButton::
+MouseGetPos, xpos, ypos
+return
+
+
 ^`::Run, C:\Windows\System32\DisplaySwitch.exe /extend ; activate secondary
 return
 
