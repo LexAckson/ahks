@@ -1,7 +1,7 @@
 ;record a click and send with shiftRight
 CoordMode, Mouse, Screen ;get mouse coord relative to screen
 
-+Right::
+^Space::
 MouseGetPos, xpos2, ypos2
 MouseMove, %xpos%, %ypos%, 0
 Click
@@ -22,7 +22,7 @@ SetTitleMatchMode, 2
 #IfWinActive, EdtScripts
 Send {Alt}ta
 Sleep 400
-Send {Tab}{Tab}{Tab}{Tab}{Tab}{Tab}{Space}{Tab}{Tab}{Space}{Tab}
+Send {Tab}{Tab}{Tab}{Tab}{Space}{Tab}{Tab}{Tab}{Tab}{Space}{Tab}
 #ifWinActive
 return
 
@@ -51,4 +51,6 @@ return
 
 
 
-
+;Visio zoom 100%
+!z::
+Send {Alt}vz1
