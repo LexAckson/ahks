@@ -17,7 +17,7 @@ return
 return
 
 ;apply formatting in edtScripts for diary
-F1:: 
+F5::
 SetTitleMatchMode, 2
 #IfWinActive, EdtScripts
 Send {Alt}ta
@@ -25,6 +25,51 @@ Sleep 400
 Send {Tab}{Tab}{Tab}{Tab}{Space}{Tab}{Tab}{Tab}{Tab}{Space}{Tab}
 #ifWinActive
 return
+
+;todo, make a regex that just applies the formatting itself (maybe have to find a way to calculate width?)
+;apply formatting in edtScripts for site
+F1:: 
+
+
+;first apply diary formatting
+SetTitleMatchMode, 2
+#IfWinActive, EdtScripts
+;bring up formatter
+Send {Alt}ta
+Sleep 400
+;apply formatting and select text
+Send {Tab}{Tab}{Tab}{Tab}{Space}{Tab}{Tab}{Tab}{Tab}{Space}{Tab}{Tab}{Tab}
+
+
+;Empty the Clipboard.
+    Clipboard =
+;Copy the select text to the Clipboard.
+    SendInput, ^c
+;Wait for the Clipboard to fill.
+    ClipWait
+
+;Perform the RegEx find and replace operation,
+;where "ABC" is the whole-word we want to replace.
+    haystack := Clipboard
+    needle := "<c>(.*?)<p><c>"
+    replacement := "<c>$1 "
+    result := RegExReplace(haystack, needle, replacement)
+
+;Empty the Clipboard
+    Clipboard =
+;Copy the result to the Clipboard.
+    Clipboard := result
+;Wait for the Clipboard to fill.
+    ClipWait
+
+;-- Optional: --
+;Send (paste) the contents of the new Clipboard.
+    SendInput, %Clipboard%
+
+
+#ifWinActive
+;Done!
+    return
 
 
 
