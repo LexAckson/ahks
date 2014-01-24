@@ -1,5 +1,7 @@
 ;record a click and send with shiftRight
 CoordMode, Mouse, Screen ;get mouse coord relative to screen
+;this is needed (at the top!) for the #IfWinActive to work
+SetTitleMatchMode 2
 
 ^Space::
 MouseGetPos, xpos2, ypos2
@@ -17,23 +19,19 @@ return
 return
 
 ;apply formatting in edtScripts for diary
-F5::
-SetTitleMatchMode, 2
+
 #IfWinActive, EdtScripts
+F5::
 Send {Alt}ta
 Sleep 400
 Send {Tab}{Tab}{Tab}{Tab}{Space}{Tab}{Tab}{Tab}{Tab}{Space}{Tab}
-#ifWinActive
 return
 
 ;todo, make a regex that just applies the formatting itself (maybe have to find a way to calculate width?)
 ;apply formatting in edtScripts for site
 F1:: 
-
-
 ;first apply diary formatting
-SetTitleMatchMode, 2
-#IfWinActive, EdtScripts
+
 ;bring up formatter
 Send {Alt}ta
 Sleep 400
@@ -66,12 +64,10 @@ Send {Tab}{Tab}{Tab}{Tab}{Space}{Tab}{Tab}{Tab}{Tab}{Space}{Tab}{Tab}{Tab}
 ;Send (paste) the contents of the new Clipboard.
     SendInput, %Clipboard%
 
-
-#ifWinActive
 ;Done!
     return
 
-
+#IfWinActive
 
 ;N++ shortcuts globally
 ^+up::
