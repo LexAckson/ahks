@@ -24,10 +24,12 @@ return
 F5::
 Send {Alt}ta
 Sleep 400
-Send {Tab}{Tab}{Tab}{Tab}{Space}{Tab}{Tab}{Tab}{Tab}{Space}{Tab}
+;clear and apply
+Send {Tab}{Tab}{Tab}{Tab}{Tab}{Tab}{Space}{Tab}{Tab}{Tab}{Tab}{Tab}{Tab}{Tab}{Space}{Tab}{Tab}{Tab}{Tab}{Tab}
+; std Send {Tab}{Tab}{Tab}{Tab}{Space}{Tab}{Tab}{Tab}{Tab}{Space}{Tab}
 return
 
-;todo, make a regex that just applies the formatting itself (maybe have to find a way to calculate width?)
+
 ;apply formatting in edtScripts for site
 F1:: 
 ;first apply diary formatting
@@ -35,7 +37,7 @@ F1::
 ;bring up formatter
 Send {Alt}ta
 Sleep 400
-;apply formatting and select text
+;apply formatting and select text, still using the edtscripts formatter because it calculates based on character width
 Send {Tab}{Tab}{Tab}{Tab}{Space}{Tab}{Tab}{Tab}{Tab}{Space}{Tab}{Tab}{Tab}
 
 
@@ -43,22 +45,8 @@ Send {Tab}{Tab}{Tab}{Tab}{Space}{Tab}{Tab}{Tab}{Tab}{Space}{Tab}{Tab}{Tab}
     Clipboard =
 ;Copy the select text to the Clipboard.
     SendInput, ^c
-;Wait for the Clipboard to fill.
-    ClipWait
 
-;Perform the RegEx find and replace operation,
-;where "ABC" is the whole-word we want to replace.
-    haystack := Clipboard
-    needle := "<c>(.*?)<p><c>"
-    replacement := "<c>$1 "
-    result := RegExReplace(haystack, needle, replacement)
-
-;Empty the Clipboard
-    Clipboard =
-;Copy the result to the Clipboard.
-    Clipboard := result
-;Wait for the Clipboard to fill.
-    ClipWait
+findReplaceClipboard("<c>(.*?)<p><c>", "<c>$1 ")
 
 ;-- Optional: --
 ;Send (paste) the contents of the new Clipboard.
@@ -69,20 +57,42 @@ Send {Tab}{Tab}{Tab}{Tab}{Space}{Tab}{Tab}{Tab}{Tab}{Space}{Tab}{Tab}{Tab}
 
 #IfWinActive
 
-;N++ shortcuts globally
+#IfWinActive, EdtScripts
+;N++ shortcuts edtScripts
+^+Down::
+SendInput {Home}+{End}^x{End}{Enter}^v
+return
+#IfWinActive
+
+;goofy attempt to make these work in all but notepad++
+#IfWinActive, Notepad++
+~^+up::
+return
+
+~^+Down::
+return
+
+~^d::
+return
+
+#IfWinActive
+
+;N++ shortcuts everything else
 ^+up::
-SendInput {Home}+{End}^x{BS}{Home}^v{Enter}{Up}
+SendInput {Home}+{End}^x{Up}{Left}{Enter}^v
 return
 
 ^+Down::
-SendInput {Home}+{End}^x{BS}{Down}{End}{Enter}^v
+SendInput {Home}+{End}^x{Backspace}{Right}{End}{Enter}^v
 return
+
 
 ^d::
 SendInput {End}+{Home}^c{End}{Enter}^v
 return
 
-^!d::
+
+^!d Up::
 Run, C:\
 Sleep 400
 Send {Tab}{Tab}{Space}
@@ -91,7 +101,153 @@ Send {Enter}
 return
 
 
-
+#IfWinActive, Visio
 ;Visio zoom 100%
 !z::
 Send {Alt}vz1
+return
+#IfWinActive
+
+;sites all sites scroller
+#IfWinActive, Chrome
+~^LButton Up::
+KeyWait Control
+Send {PgDn 19}
+return
+#IfWinActive
+
+
+;sites info copier
+#IfWinActive, Chrome
+^k Up::
+SetKeyDelay, 40, 40
+
+;cut spaces from sitenum
+findReplaceClipboard("^\s*(.*?)\s*$", "$1")
+
+Send ^v
+Send !{Tab}{Tab}^c
+;cut spaces from first name
+findReplaceClipboard("^\s*(.*?)\s*$", "$1")
+
+Send !{Tab}{Tab}^v
+Send {Home}{Right}+{End}{Space}
+Send !{Tab}{Tab}
+Send ^c!{Tab}
+;cut spaces from last name
+findReplaceClipboard("^\s*(.*?)\s*$", "$1")
+
+Send ^v
+Send {Tab}{Tab}!{Tab}
+Send {Tab}^c
+Send !{Tab}
+Send ^v
+Send !{Tab}
+Send {Tab}^c
+Send !{Tab}
+Send {Tab}^v
+Send !{Tab}
+Send {Tab}^c
+Send !{Tab}
+Send {Tab}^v
+Send !{Tab}
+Send {Tab}^c
+Send !{Tab}
+Send {Tab}^v
+Send !{Tab}
+;rem tab to account for no state/prov
+Send {Tab}{Tab}{Tab}^c
+Send !{Tab}
+Send {Tab}{Tab}^v
+SetKeyDelay
+return
+#IfWinActive
+
+;;Expert supply item macro, no non-eng manual present
+;^!j::
+;Send 00{Tab}{Tab}{Tab}
+;Send {Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send {Tab}{Tab}{Tab}
+;;x2 device serial decal
+;Send {Tab}{Tab}2{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send {Tab}{Tab}{Tab}
+;Send {Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send {Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send {Tab}{Tab}{Tab}
+;Send {Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}1{Tab}100
+;return
+;
+;;Expert supply item macro, non-eng manual present
+;^!h::
+;Send 00{Tab}{Tab}{Tab}
+;Send {Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;;manuals here, will have to set manually lol
+;Send {Tab}{Tab}{Tab}
+;Send {Tab}{Tab}{Tab}
+;Send {Tab}{Tab}{Tab}
+;;x2 device serial decal
+;Send {Tab}{Tab}2{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send {Tab}{Tab}{Tab}
+;Send {Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send {Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send {Tab}{Tab}{Tab}
+;Send {Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}{Tab}
+;Send 100{Tab}{Tab}1{Tab}100
+;;might also have to set SIM if phone adaptor is present
+;return
+
+findReplaceClipboard(needle, replacement){
+;Wait for the Clipboard to fill.
+    ClipWait
+
+;Perform the RegEx find and replace operation,
+    haystack := Clipboard
+    result := RegExReplace(haystack, needle, replacement)
+
+;Empty the Clipboard
+    Clipboard =
+;Copy the result to the Clipboard.
+    Clipboard := result
+;Wait for the Clipboard to fill.
+    ClipWait
+}
