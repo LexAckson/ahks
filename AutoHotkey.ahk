@@ -18,6 +18,16 @@ return
 ^`::Run, C:\Windows\System32\DisplaySwitch.exe /extend ; activate secondary
 return
 
+;open up diary data folder
+^!d Up::
+Run, C:\
+Sleep 400
+Send {Tab}{Tab}{Space}
+SendInput {Raw}Computer\Pocket_PC\\\Program Files\invivo\data
+Send {Enter}
+return
+
+
 ;apply formatting in edtScripts for diary
 
 #IfWinActive, EdtScripts
@@ -28,9 +38,10 @@ Sleep 400
 Send {Tab}{Tab}{Tab}{Tab}{Tab}{Tab}{Space}{Tab}{Tab}{Tab}{Tab}{Tab}{Tab}{Tab}{Space}{Tab}{Tab}{Tab}{Tab}{Tab}
 ; std Send {Tab}{Tab}{Tab}{Tab}{Space}{Tab}{Tab}{Tab}{Tab}{Space}{Tab}
 return
-
+#IfWinActive
 
 ;apply formatting in edtScripts for site
+#IfWinActive, EdtScripts
 F1:: 
 ;first apply diary formatting
 
@@ -47,6 +58,7 @@ Send {Tab}{Tab}{Tab}{Tab}{Space}{Tab}{Tab}{Tab}{Tab}{Space}{Tab}{Tab}{Tab}
     SendInput, ^c
 
 findReplaceClipboard("<c>(.*?)<p><c>", "<c>$1 ")
+findReplaceClipboard("(<\w>)\s?", "$1")
 
 ;-- Optional: --
 ;Send (paste) the contents of the new Clipboard.
@@ -92,15 +104,6 @@ SendInput {End}+{Home}^c{End}{Enter}^v
 return
 
 
-^!d Up::
-Run, C:\
-Sleep 400
-Send {Tab}{Tab}{Space}
-SendInput {Raw}Computer\Pocket_PC\\\Program Files\invivo\data
-Send {Enter}
-return
-
-
 #IfWinActive, Visio
 ;Visio zoom 100%
 !z::
@@ -117,47 +120,65 @@ return
 #IfWinActive
 
 
+;temp syncid setter
+#IfWinActive, Chrome
+^. Up::
+Send {Tab}{Tab}10{Tab}{Tab}{Tab}{Tab}{Tab}{Tab}{Space}{Tab}
+return
+#IfWinActive
+
 ;sites info copier
 #IfWinActive, Chrome
 ^k Up::
 SetKeyDelay, 40, 40
 
+clipboard = 
+Send !{Tab}{Home}{Down}^c
+Send !{Tab}
+
 ;cut spaces from sitenum
 findReplaceClipboard("^\s*(.*?)\s*$", "$1")
 
 Send ^v
+clipboard =
 Send !{Tab}{Tab}^c
 ;cut spaces from first name
-findReplaceClipboard("^\s*(.*?)\s*$", "$1")
+findReplaceClipboard("^\W*(\w).*$", "$1")
 
 Send !{Tab}{Tab}^v
-Send {Home}{Right}+{End}{Space}
+clipboard =
+Send {Space}
 Send !{Tab}{Tab}
 Send ^c!{Tab}
 ;cut spaces from last name
 findReplaceClipboard("^\s*(.*?)\s*$", "$1")
 
 Send ^v
+clipboard =
 Send {Tab}{Tab}!{Tab}
 Send {Tab}^c
 Send !{Tab}
 Send ^v
+clipboard =
 Send !{Tab}
 Send {Tab}^c
 Send !{Tab}
 Send {Tab}^v
+clipboard =
 Send !{Tab}
 Send {Tab}^c
 Send !{Tab}
 Send {Tab}^v
+clipboard =
 Send !{Tab}
 Send {Tab}^c
 Send !{Tab}
 Send {Tab}^v
+clipboard = 
 Send !{Tab}
-;rem tab to account for no state/prov
 Send {Tab}{Tab}{Tab}^c
 Send !{Tab}
+;rem tab to account for no state/prov
 Send {Tab}{Tab}^v
 SetKeyDelay
 return
