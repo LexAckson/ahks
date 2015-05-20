@@ -23,7 +23,7 @@ return
 Run, C:\
 Sleep 400
 Send {Tab}{Tab}{Space}
-SendInput {Raw}Computer\Pocket_PC\\\Program Files\invivo\data
+SendInput {Raw}Computer\T-Mobile T-Mobile_LEO\\\Program Files\invivo\data
 Send {Enter}
 return
 
@@ -65,7 +65,31 @@ findReplaceClipboard("(<\w>)\s?", "$1")
     SendInput, %Clipboard%
 
 ;Done!
-    return
+return
+
+;apply formatting in edtScripts for site (left)
+#IfWinActive, EdtScripts
+!F1:: 
+;first apply diary formatting
+
+;Empty the Clipboard.
+    Clipboard =
+;Copy the select text to the Clipboard.
+    SendInput, ^c
+
+;remove double spaces
+findReplaceClipboard("\s\s", " ")
+;remove trailing spaces
+findReplaceClipboard("\s+$", "")
+;put in line breaks
+findReplaceClipboard("(.{60,75})\s", "$1<p>")
+
+;-- Optional: --
+;Send (paste) the contents of the new Clipboard.
+    SendInput, ^v
+
+;Done!
+return
 
 #IfWinActive
 

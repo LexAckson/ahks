@@ -11,7 +11,7 @@ IfWinExist, Windows Mobile Device Center
 	WinClose
 	Sleep 400
 	Send {Tab}{Tab}{Space}
-	SendInput {Raw}Computer\Pocket_PC\\\Program Files\invivo\data
+	SendInput {Raw}Computer\T-Mobile T-Mobile_LEO\\\Program Files\invivo\data
 	Send {Enter}
 }
 return
